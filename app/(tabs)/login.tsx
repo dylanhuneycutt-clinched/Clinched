@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 import { supabase } from '../supabase';
+
+const logo = require('../../assets/images/logo1.png');
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -28,8 +30,11 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.logoWrap}>
+        <Image source={logo} style={styles.logo} resizeMode="contain" />
+        <Text style={styles.logoText}>Clinched</Text>
+      </View>
       <View style={styles.inner}>
-        <Text style={styles.wordmark}>Clinched</Text>
         <Text style={styles.tagline}>{isSignUp ? 'Create your account' : 'Welcome back'}</Text>
         {isSignUp && (
           <TextInput style={styles.input} placeholder="Team name" placeholderTextColor="#444" value={teamName} onChangeText={setTeamName} autoCapitalize="words" />
@@ -49,9 +54,11 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   container: { flex:1, backgroundColor:'#0A0A0A', justifyContent:'center' },
+  logoWrap: { alignItems:'center', marginBottom:32 },
+  logo: { width:120, height:120 },
+  logoText: { fontSize:16, fontWeight:'500', color:'#C9A84C', letterSpacing:4, marginTop:8 },
   inner: { paddingHorizontal:32 },
-  wordmark: { fontSize:32, fontWeight:'500', color:'#C9A84C', letterSpacing:-1, marginBottom:8 },
-  tagline: { fontSize:14, color:'#555', marginBottom:40 },
+  tagline: { fontSize:14, color:'#555', marginBottom:32, textAlign:'center' },
   input: { backgroundColor:'#111', borderWidth:0.5, borderColor:'#222', borderRadius:10, padding:14, fontSize:14, color:'#fff', marginBottom:12 },
   btn: { backgroundColor:'#C9A84C', borderRadius:10, padding:16, alignItems:'center', marginTop:8 },
   btnDim: { opacity:0.5 },

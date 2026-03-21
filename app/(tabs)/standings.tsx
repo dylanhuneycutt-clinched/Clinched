@@ -1,5 +1,8 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { useState } from 'react';
+import { useRouter } from 'expo-router';
+
+const logo = require('../../assets/images/logo1.png');
 
 type Row = { rank:number; name:string; pts:string; me:boolean };
 type Data = { [key:string]: Row[] };
@@ -50,11 +53,15 @@ const data: Data = {
 export default function StandingsScreen() {
   const [tab, setTab] = useState('overall');
   const rows = data[tab];
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
       <View style={styles.topbar}>
-        <Text style={styles.wordmark}>Standings</Text>
+        <TouchableOpacity onPress={() => router.replace('/(tabs)')} style={styles.logoWrap}>
+          <Image source={logo} style={styles.logo} resizeMode="contain" />
+          <Text style={styles.logoText}>Clinched</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.tabs}>
         {['overall','NFL','NBA','MLB'].map(t => (
@@ -88,8 +95,10 @@ export default function StandingsScreen() {
 
 const styles = StyleSheet.create({
   container: { flex:1, backgroundColor:'#0A0A0A' },
-  topbar: { paddingHorizontal:24, paddingTop:60, paddingBottom:16 },
-  wordmark: { fontSize:17, fontWeight:'500', letterSpacing:-0.5, color:'#C9A84C' },
+  topbar: { paddingHorizontal:24, paddingTop:60, paddingBottom:8 },
+  logoWrap: { alignItems:'flex-start' },
+  logo: { width:52, height:52 },
+  logoText: { fontSize:11, fontWeight:'500', color:'#C9A84C', letterSpacing:2, marginTop:2 },
   tabs: { flexDirection:'row', borderBottomWidth:0.5, borderBottomColor:'#222', marginHorizontal:24 },
   tab: { flex:1, paddingVertical:12, alignItems:'center', borderBottomWidth:2, borderBottomColor:'transparent', marginBottom:-0.5 },
   tabOn: { borderBottomColor:'#C9A84C' },

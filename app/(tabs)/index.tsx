@@ -1,11 +1,19 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
+
+const logo = require('../../assets/images/logo1.png');
 
 export default function HomeScreen() {
+  const router = useRouter();
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
         <View style={styles.topbar}>
-          <Text style={styles.wordmark}>Clinched</Text>
+          <TouchableOpacity onPress={() => router.replace('/(tabs)')} style={styles.logoWrap}>
+            <Image source={logo} style={styles.logo} resizeMode="contain" />
+            <Text style={styles.logoText}>Clinched</Text>
+          </TouchableOpacity>
           <Text style={styles.week}>Week 8</Text>
         </View>
         <View style={styles.hero}>
@@ -26,7 +34,7 @@ export default function HomeScreen() {
             </View>
             <View style={styles.sportRight}>
               <Text style={styles.sportPts}>94 – 81</Text>
-              <Text style={[styles.sportPtsLabel, {color:'#C9A84C'}]}>Winning</Text>
+              <Text style={[styles.sportPtsLabel, {color:'#16a34a'}]}>Winning</Text>
             </View>
           </View>
           <View style={styles.sportRow}>
@@ -76,9 +84,11 @@ const styles = StyleSheet.create({
   container: { flex:1, backgroundColor:'#0A0A0A' },
   scroll: { flex:1 },
   topbar: { flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:24, paddingTop:60, paddingBottom:8 },
-  wordmark: { fontSize:17, fontWeight:'500', letterSpacing:-0.5, color:'#C9A84C' },
+  logoWrap: { alignItems:'flex-start' },
+  logo: { width:52, height:52 },
+  logoText: { fontSize:11, fontWeight:'500', color:'#C9A84C', letterSpacing:2, marginTop:2 },
   week: { fontSize:13, color:'#555' },
-  hero: { paddingHorizontal:24, paddingTop:28, paddingBottom:24 },
+  hero: { paddingHorizontal:24, paddingTop:20, paddingBottom:24 },
   heroLabel: { fontSize:13, color:'#555', marginBottom:6 },
   heroNum: { fontSize:48, fontWeight:'500', letterSpacing:-2, color:'#fff' },
   heroSub: { fontSize:13, color:'#dc2626', marginTop:6 },
