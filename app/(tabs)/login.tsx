@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 import { supabase } from '../supabase';
+import { useFonts, Orbitron_700Bold } from '@expo-google-fonts/orbitron';
 
 const logo = require('../../assets/images/logo1.png');
 
@@ -10,6 +11,8 @@ export default function LoginScreen() {
   const [teamName, setTeamName] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [fontsLoaded] = useFonts({ Orbitron_700Bold });
+  if (!fontsLoaded) return <View style={{flex:1, backgroundColor:'#0A0A0A'}} />;
 
   async function handleAuth() {
     setLoading(true);
@@ -55,8 +58,8 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: { flex:1, backgroundColor:'#0A0A0A', justifyContent:'center' },
   logoWrap: { alignItems:'center', marginBottom:32 },
-  logo: { width:120, height:120 },
-  logoText: { fontSize:16, fontWeight:'500', color:'#C9A84C', letterSpacing:4, marginTop:8 },
+  logo: { width:200, height:200 },
+  logoText: { fontSize:16, fontWeight:'500', color:'#C9A84C', letterSpacing:4, marginTop:8, fontFamily:'Orbitron_700Bold' },
   inner: { paddingHorizontal:32 },
   tagline: { fontSize:14, color:'#555', marginBottom:32, textAlign:'center' },
   input: { backgroundColor:'#111', borderWidth:0.5, borderColor:'#222', borderRadius:10, padding:14, fontSize:14, color:'#fff', marginBottom:12 },

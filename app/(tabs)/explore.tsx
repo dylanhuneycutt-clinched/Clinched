@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
+import { useFonts, Orbitron_700Bold } from '@expo-google-fonts/orbitron';
 
 const logo = require('../../assets/images/logo1.png');
 
@@ -54,6 +55,8 @@ export default function TeamsScreen() {
   const [sport, setSport] = useState('NFL');
   const players = rosters[sport];
   const router = useRouter();
+  const [fontsLoaded] = useFonts({ Orbitron_700Bold });
+  if (!fontsLoaded) return <View style={{flex:1, backgroundColor:'#0A0A0A'}} />;
 
   return (
     <View style={styles.container}>
@@ -110,8 +113,8 @@ const styles = StyleSheet.create({
   container: { flex:1, backgroundColor:'#0A0A0A' },
   topbar: { paddingHorizontal:24, paddingTop:60, paddingBottom:8 },
   logoWrap: { alignItems:'flex-start' },
-  logo: { width:52, height:52 },
-  logoText: { fontSize:11, fontWeight:'500', color:'#C9A84C', letterSpacing:2, marginTop:2 },
+  logo: { width:120, height:120 },
+  logoText: { fontSize:11, fontWeight:'500', color:'#C9A84C', letterSpacing:2, marginTop:2, fontFamily:'Orbitron_700Bold' },
   tabs: { flexDirection:'row', borderBottomWidth:0.5, borderBottomColor:'#222', marginHorizontal:24 },
   tab: { flex:1, paddingVertical:12, alignItems:'center', borderBottomWidth:2, borderBottomColor:'transparent', marginBottom:-0.5 },
   tabOn: { borderBottomColor:'#C9A84C' },

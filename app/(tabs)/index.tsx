@@ -1,11 +1,13 @@
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-
+import { useFonts, Orbitron_400Regular, Orbitron_700Bold } from '@expo-google-fonts/orbitron';
+import { View as LoadingView } from 'react-native';
 const logo = require('../../assets/images/logo1.png');
 
 export default function HomeScreen() {
   const router = useRouter();
-
+const [fontsLoaded] = useFonts({ Orbitron_400Regular, Orbitron_700Bold });
+if (!fontsLoaded) return <LoadingView style={{flex:1, backgroundColor:'#0A0A0A'}} />;
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
@@ -85,8 +87,8 @@ const styles = StyleSheet.create({
   scroll: { flex:1 },
   topbar: { flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:24, paddingTop:60, paddingBottom:8 },
   logoWrap: { alignItems:'flex-start' },
-  logo: { width:52, height:52 },
-  logoText: { fontSize:11, fontWeight:'500', color:'#C9A84C', letterSpacing:2, marginTop:2 },
+  logo: { width:120, height:120 },
+  logoText: { fontSize:11, fontWeight:'500', color:'#C9A84C', letterSpacing:2, marginTop:2, fontFamily:'Orbitron_700Bold' },
   week: { fontSize:13, color:'#555' },
   hero: { paddingHorizontal:24, paddingTop:20, paddingBottom:24 },
   heroLabel: { fontSize:13, color:'#555', marginBottom:6 },
