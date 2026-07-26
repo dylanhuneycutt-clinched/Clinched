@@ -2,12 +2,20 @@ import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'rea
 import { useRouter } from 'expo-router';
 import { useFonts, Orbitron_400Regular, Orbitron_700Bold } from '@expo-google-fonts/orbitron';
 import { View as LoadingView } from 'react-native';
+import { useProfile } from '../../hooks/use-profile';
+import { hexWithAlpha } from '../../constants/color';
+
 const logo = require('../../assets/images/logo1.png');
 
 export default function HomeScreen() {
   const router = useRouter();
-const [fontsLoaded] = useFonts({ Orbitron_400Regular, Orbitron_700Bold });
-if (!fontsLoaded) return <LoadingView style={{flex:1, backgroundColor:'#0A0A0A'}} />;
+  const { profile } = useProfile();
+  const [fontsLoaded] = useFonts({ Orbitron_400Regular, Orbitron_700Bold });
+  if (!fontsLoaded) return <LoadingView style={{flex:1, backgroundColor:'#0A0A0A'}} />;
+
+  const teamName = profile?.team_name ?? 'My Team';
+  const teamColor = profile?.team_color ?? '#C9A84C';
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
@@ -16,65 +24,17 @@ if (!fontsLoaded) return <LoadingView style={{flex:1, backgroundColor:'#0A0A0A'}
             <Image source={logo} style={styles.logo} resizeMode="contain" />
             <Text style={styles.logoText}>Clinched</Text>
           </TouchableOpacity>
-          <Text style={styles.week}>Week 8</Text>
         </View>
         <View style={styles.hero}>
-          <Text style={styles.heroLabel}>My cumulative score</Text>
-          <Text style={styles.heroNum}>4,148</Text>
-          <Text style={styles.heroSub}>143 behind the lead</Text>
+          <Text style={styles.heroLabel}>My team</Text>
+          <Text style={[styles.heroNum, { color: teamColor }]}>{teamName}</Text>
+          <Text style={styles.heroSub}>Season hasn't started yet</Text>
         </View>
-        <View style={styles.divider} />
+        <View style={[styles.divider, { backgroundColor: hexWithAlpha(teamColor, 0.3) }]} />
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>THIS WEEK</Text>
-          <View style={styles.sportRow}>
-            <View style={styles.sportLeft}>
-              <View style={[styles.dot, {backgroundColor:'#C9A84C'}]} />
-              <View>
-                <Text style={styles.sportName}>NFL</Text>
-                <Text style={styles.sportDetail}>Live · vs Gridiron FC</Text>
-              </View>
-            </View>
-            <View style={styles.sportRight}>
-              <Text style={styles.sportPts}>94 – 81</Text>
-              <Text style={[styles.sportPtsLabel, {color:'#16a34a'}]}>Winning</Text>
-            </View>
-          </View>
-          <View style={styles.sportRow}>
-            <View style={styles.sportLeft}>
-              <View style={[styles.dot, {backgroundColor:'#C9A84C'}]} />
-              <View>
-                <Text style={styles.sportName}>NBA</Text>
-                <Text style={styles.sportDetail}>Live · vs Bench Bros</Text>
-              </View>
-            </View>
-            <View style={styles.sportRight}>
-              <Text style={styles.sportPts}>210 – 238</Text>
-              <Text style={[styles.sportPtsLabel, {color:'#dc2626'}]}>Trailing</Text>
-            </View>
-          </View>
-          <View style={styles.sportRow}>
-            <View style={styles.sportLeft}>
-              <View style={[styles.dot, {backgroundColor:'#C9A84C'}]} />
-              <View>
-                <Text style={styles.sportName}>MLB</Text>
-                <Text style={styles.sportDetail}>Season total · Wk 14 of 16</Text>
-              </View>
-            </View>
-            <View style={styles.sportRight}>
-              <Text style={styles.sportPts}>1,847</Text>
-              <Text style={styles.sportPtsLabel}>2nd place</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.champBanner}>
-          <View>
-            <Text style={styles.champLabel}>Grand champion</Text>
-            <Text style={styles.champRank}>2nd</Text>
-            <Text style={styles.champLabel}>of 8 managers</Text>
-          </View>
-          <View style={{alignItems:'flex-end'}}>
-            <Text style={[styles.champRank, {color:'#dc2626'}]}>–143</Text>
-            <Text style={styles.champLabel}>behind Bench Bros</Text>
+          <View style={[styles.emptyCard, { borderColor: hexWithAlpha(teamColor, 0.2) }]}>
+            <Text style={styles.emptyTitle}>Season hasn't started yet</Text>
+            <Text style={styles.emptyBody}>Matchups, scores, and standings will show up here once the season kicks off.</Text>
           </View>
         </View>
       </ScrollView>
@@ -89,23 +49,13 @@ const styles = StyleSheet.create({
   logoWrap: { alignItems:'flex-start' },
   logo: { width:120, height:120 },
   logoText: { fontSize:11, fontWeight:'500', color:'#C9A84C', letterSpacing:2, marginTop:2, fontFamily:'Orbitron_700Bold' },
-  week: { fontSize:13, color:'#555' },
   hero: { paddingHorizontal:24, paddingTop:20, paddingBottom:24 },
   heroLabel: { fontSize:13, color:'#555', marginBottom:6 },
-  heroNum: { fontSize:48, fontWeight:'500', letterSpacing:-2, color:'#fff' },
-  heroSub: { fontSize:13, color:'#dc2626', marginTop:6 },
-  divider: { height:0.5, backgroundColor:'#222', marginHorizontal:24 },
+  heroNum: { fontSize:40, fontWeight:'700', letterSpacing:-1, fontFamily:'Orbitron_700Bold' },
+  heroSub: { fontSize:13, color:'#666', marginTop:10 },
+  divider: { height:1, marginHorizontal:24, borderRadius:1 },
   section: { paddingHorizontal:24, paddingTop:24 },
-  sectionLabel: { fontSize:11, fontWeight:'500', letterSpacing:0.6, color:'#444', marginBottom:16 },
-  sportRow: { flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingVertical:16, borderBottomWidth:0.5, borderBottomColor:'#1a1a1a' },
-  sportLeft: { flexDirection:'row', alignItems:'center', gap:14 },
-  dot: { width:7, height:7, borderRadius:4 },
-  sportName: { fontSize:15, fontWeight:'500', color:'#fff' },
-  sportDetail: { fontSize:12, color:'#555', marginTop:2 },
-  sportRight: { alignItems:'flex-end' },
-  sportPts: { fontSize:15, fontWeight:'500', color:'#fff' },
-  sportPtsLabel: { fontSize:11, color:'#555', marginTop:2 },
-  champBanner: { margin:24, backgroundColor:'#111', borderRadius:14, padding:20, flexDirection:'row', justifyContent:'space-between', alignItems:'center', borderWidth:0.5, borderColor:'#C9A84C33' },
-  champLabel: { fontSize:11, color:'#555', marginBottom:3 },
-  champRank: { fontSize:28, fontWeight:'500', letterSpacing:-1, color:'#C9A84C' },
+  emptyCard: { borderWidth:0.5, borderRadius:14, padding:24, alignItems:'center' },
+  emptyTitle: { fontSize:15, fontWeight:'600', color:'#fff', marginBottom:8, textAlign:'center' },
+  emptyBody: { fontSize:13, color:'#666', textAlign:'center', lineHeight:19 },
 });

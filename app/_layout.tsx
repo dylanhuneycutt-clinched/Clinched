@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Stack, useRouter } from 'expo-router';
-import { supabase } from './supabase';
+import { supabase } from '../supabase';
 
 export default function RootLayout() {
   const [session, setSession] = useState<any>(null);

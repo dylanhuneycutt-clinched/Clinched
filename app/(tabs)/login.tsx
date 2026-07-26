@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
-import { supabase } from '../supabase';
+import { useRouter } from 'expo-router';
+import { supabase } from '../../supabase';
+import { TEAMS } from '../../constants/teams';
 import { useFonts, Orbitron_700Bold } from '@expo-google-fonts/orbitron';
 
 const logo = require('../../assets/images/logo1.png');
 
 export default function LoginScreen() {
+  const router = useRouter();
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [teamName, setTeamName] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fontsLoaded] = useFonts({ Orbitron_700Bold });
@@ -17,16 +20,31 @@ export default function LoginScreen() {
   async function handleAuth() {
     setLoading(true);
     if (isSignUp) {
+      // Team assignment happens atomically in a DB trigger (see
+      // supabase/migrations) so it can't race with other signups. This is
+      // just an early, friendly check to avoid calling signUp when we
+      // already know every slot is taken.
+      const { count } = await supabase.from('profiles').select('team_name', { count: 'exact', head: true });
+      if ((count ?? 0) >= TEAMS.length) {
+        alert('League is full');
+        setLoading(false);
+        return;
+      }
+
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: { data: { team_name: teamName } }
+        options: { data: { full_name: fullName } }
       });
-      if (error) alert(error.message);
-      else alert('Check your email to confirm your account');
+      if (error) {
+        alert(error.message.includes('Database error') ? 'League is full' : error.message);
+      } else {
+        alert('Check your email to confirm your account');
+      }
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) alert(error.message);
+      else router.replace('/(tabs)');
     }
     setLoading(false);
   }
@@ -40,7 +58,7 @@ export default function LoginScreen() {
       <View style={styles.inner}>
         <Text style={styles.tagline}>{isSignUp ? 'Create your account' : 'Welcome back'}</Text>
         {isSignUp && (
-          <TextInput style={styles.input} placeholder="Team name" placeholderTextColor="#444" value={teamName} onChangeText={setTeamName} autoCapitalize="words" />
+          <TextInput style={styles.input} placeholder="Full name" placeholderTextColor="#444" value={fullName} onChangeText={setFullName} autoCapitalize="words" />
         )}
         <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#444" value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" />
         <TextInput style={styles.input} placeholder="Password" placeholderTextColor="#444" value={password} onChangeText={setPassword} secureTextEntry />
