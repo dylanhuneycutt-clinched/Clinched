@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, TextInput } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useFonts, Orbitron_700Bold } from '@expo-google-fonts/orbitron';
@@ -29,6 +29,7 @@ export default function CommissionerScreen() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Player[]>([]);
   const [searching, setSearching] = useState(false);
+  const [savingSlotId, setSavingSlotId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!authLoading && !isCommissioner) router.replace('/(tabs)');
@@ -83,22 +84,40 @@ export default function CommissionerScreen() {
   }
 
   async function assignPlayer(slot: RosterSlot, player: Player) {
-    if (!selectedProfile) return;
-    const { error } = await supabase.from('roster_players').upsert(
-      { profile_id: selectedProfile.id, player_id: player.id, sport, slot_position: slot.id },
-      { onConflict: 'profile_id,sport,slot_position' }
-    );
-    if (error) { alert(error.message); return; }
-    setActiveSlotId(null);
-    setQuery('');
-    setResults([]);
-    refresh();
+    if (!selectedProfile || savingSlotId) return;
+    setSavingSlotId(slot.id);
+    try {
+      const { error } = await supabase.from('roster_players').upsert(
+        { profile_id: selectedProfile.id, player_id: player.id, sport, slot_position: slot.id },
+        { onConflict: 'profile_id,sport,slot_position' }
+      );
+      if (error) {
+        Alert.alert('Could not save player', error.message);
+        return;
+      }
+      await refresh();
+      setActiveSlotId(null);
+      setQuery('');
+      setResults([]);
+      Alert.alert('Player saved', `${player.name} was added to ${selectedProfile.team_name} (${slot.pos}).`);
+    } catch (err: any) {
+      Alert.alert('Could not save player', err?.message ?? 'Unknown error');
+    } finally {
+      setSavingSlotId(null);
+    }
   }
 
   async function removePlayer(rosterRowId: string) {
-    const { error } = await supabase.from('roster_players').delete().eq('id', rosterRowId);
-    if (error) { alert(error.message); return; }
-    refresh();
+    try {
+      const { error } = await supabase.from('roster_players').delete().eq('id', rosterRowId);
+      if (error) {
+        Alert.alert('Could not remove player', error.message);
+        return;
+      }
+      await refresh();
+    } catch (err: any) {
+      Alert.alert('Could not remove player', err?.message ?? 'Unknown error');
+    }
   }
 
   function filteredResults(slot: RosterSlot) {
@@ -161,8 +180,14 @@ export default function CommissionerScreen() {
             {!searching && query.trim().length > 0 && slotResults.length === 0 && (
               <Text style={styles.searchHint}>No matching available players</Text>
             )}
+            {savingSlotId === slot.id && <Text style={styles.searchHint}>Saving…</Text>}
             {slotResults.map(p => (
-              <TouchableOpacity key={p.id} style={styles.resultRow} onPress={() => assignPlayer(slot, p)}>
+              <TouchableOpacity
+                key={p.id}
+                style={styles.resultRow}
+                disabled={savingSlotId !== null}
+                onPress={() => assignPlayer(slot, p)}
+              >
                 <Text style={styles.resultName}>{p.name}</Text>
                 <Text style={styles.resultMeta}>{p.position} · {p.team} · {p.sport}</Text>
               </TouchableOpacity>
