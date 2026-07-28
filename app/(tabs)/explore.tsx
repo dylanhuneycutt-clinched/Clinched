@@ -7,6 +7,51 @@ import { hexWithAlpha } from '../../constants/color';
 
 const logo = require('../../assets/images/logo1.png');
 
+type SlotDef = { pos: string; label: string };
+
+const STARTER_SLOTS: Record<string, SlotDef[]> = {
+  NFL: [
+    { pos: 'QB', label: 'Quarterback' },
+    { pos: 'QB', label: 'Quarterback' },
+    { pos: 'RB', label: 'Running Back' },
+    { pos: 'RB', label: 'Running Back' },
+    { pos: 'WR', label: 'Wide Receiver' },
+    { pos: 'WR', label: 'Wide Receiver' },
+    { pos: 'TE', label: 'Tight End' },
+    { pos: 'TE', label: 'Tight End' },
+  ],
+  NBA: [
+    { pos: 'G', label: 'Guard' },
+    { pos: 'G', label: 'Guard' },
+    { pos: 'F', label: 'Forward' },
+    { pos: 'F', label: 'Forward' },
+    { pos: 'C', label: 'Center' },
+    { pos: 'UT', label: 'Utility' },
+    { pos: 'UT', label: 'Utility' },
+    { pos: 'UT', label: 'Utility' },
+  ],
+  MLB: [
+    { pos: 'C', label: 'Catcher' },
+    { pos: '1B', label: 'First Base' },
+    { pos: '2B', label: 'Second Base' },
+    { pos: 'SS', label: 'Shortstop' },
+    { pos: '3B', label: 'Third Base' },
+    { pos: 'OF', label: 'Outfielder' },
+    { pos: 'OF', label: 'Outfielder' },
+    { pos: 'OF', label: 'Outfielder' },
+  ],
+};
+
+const BENCH_SLOTS: SlotDef[] = [
+  { pos: 'BN', label: 'Bench Player' },
+  { pos: 'BN', label: 'Bench Player' },
+  { pos: 'BN', label: 'Bench Player' },
+];
+
+const IR_SLOTS: SlotDef[] = [
+  { pos: 'IR', label: 'IR Player' },
+];
+
 export default function TeamsScreen() {
   const [sport, setSport] = useState('NFL');
   const router = useRouter();
@@ -16,6 +61,22 @@ export default function TeamsScreen() {
 
   const teamName = profile?.team_name ?? 'My Team';
   const teamColor = profile?.team_color ?? '#C9A84C';
+
+  const renderSlot = (slot: SlotDef, index: number) => (
+    <TouchableOpacity
+      key={`${slot.pos}-${index}`}
+      style={[
+        styles.slotCard,
+        { borderColor: hexWithAlpha(teamColor, 0.18), backgroundColor: hexWithAlpha(teamColor, 0.03) },
+      ]}
+      activeOpacity={0.6}
+    >
+      <View style={[styles.posBadge, { backgroundColor: hexWithAlpha(teamColor, 0.1), borderColor: hexWithAlpha(teamColor, 0.25) }]}>
+        <Text style={[styles.posBadgeText, { color: hexWithAlpha(teamColor, 0.85) }]}>{slot.pos}</Text>
+      </View>
+      <Text style={styles.slotPrompt}>Add {slot.label}</Text>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>
@@ -38,10 +99,14 @@ export default function TeamsScreen() {
       <View style={[styles.divider, { backgroundColor: hexWithAlpha(teamColor, 0.3) }]} />
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
         <View style={styles.section}>
-          <View style={[styles.emptyCard, { borderColor: hexWithAlpha(teamColor, 0.2) }]}>
-            <Text style={styles.emptyTitle}>Season starting soon</Text>
-            <Text style={styles.emptyBody}>Your {sport} roster will appear here once the draft happens and the season begins.</Text>
-          </View>
+          <Text style={styles.groupLabel}>Starters</Text>
+          {STARTER_SLOTS[sport].map(renderSlot)}
+
+          <Text style={[styles.groupLabel, styles.groupLabelSpaced]}>Bench</Text>
+          {BENCH_SLOTS.map(renderSlot)}
+
+          <Text style={[styles.groupLabel, styles.groupLabelSpaced]}>Injured Reserve</Text>
+          {IR_SLOTS.map(renderSlot)}
         </View>
       </ScrollView>
     </View>
@@ -64,7 +129,10 @@ const styles = StyleSheet.create({
   divider: { height:1, marginHorizontal:24, borderRadius:1 },
   scroll: { flex:1 },
   section: { paddingHorizontal:24, paddingTop:24, paddingBottom:40 },
-  emptyCard: { borderWidth:0.5, borderRadius:14, padding:24, alignItems:'center' },
-  emptyTitle: { fontSize:15, fontWeight:'600', color:'#fff', marginBottom:8, textAlign:'center' },
-  emptyBody: { fontSize:13, color:'#666', textAlign:'center', lineHeight:19 },
+  groupLabel: { fontSize:11, fontWeight:'600', color:'#555', letterSpacing:1.5, textTransform:'uppercase', marginBottom:10 },
+  groupLabelSpaced: { marginTop:24 },
+  slotCard: { flexDirection:'row', alignItems:'center', borderWidth:1, borderStyle:'dashed', borderRadius:12, paddingVertical:14, paddingHorizontal:14, marginBottom:10 },
+  posBadge: { width:42, paddingVertical:6, borderRadius:8, borderWidth:1, alignItems:'center', justifyContent:'center', marginRight:14 },
+  posBadgeText: { fontSize:11, fontWeight:'700', letterSpacing:0.5 },
+  slotPrompt: { fontSize:14, color:'#666', fontWeight:'500' },
 });
