@@ -8,6 +8,7 @@ import { supabase } from '../../supabase';
 import { hexWithAlpha } from '../../constants/color';
 import { TEAMS } from '../../constants/teams';
 import { STARTER_SLOTS, BENCH_SLOTS, IR_SLOTS, RosterSlot, Sport } from '../../constants/rosters';
+import { generateRoundRobinSchedule } from '../../services/schedule';
 
 const logo = require('../../assets/images/logo1.png');
 const GOLD = '#C9A84C';
@@ -30,6 +31,7 @@ export default function CommissionerScreen() {
   const [results, setResults] = useState<Player[]>([]);
   const [searching, setSearching] = useState(false);
   const [savingSlotId, setSavingSlotId] = useState<string | null>(null);
+  const [generatingSchedule, setGeneratingSchedule] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !isCommissioner) router.replace('/(tabs)');
@@ -117,6 +119,47 @@ export default function CommissionerScreen() {
       await refresh();
     } catch (err: any) {
       Alert.alert('Could not remove player', err?.message ?? 'Unknown error');
+    }
+  }
+
+  async function generateSchedule() {
+    if (generatingSchedule) return;
+    setGeneratingSchedule(true);
+    try {
+      const [nflCheck, nbaCheck] = await Promise.all([
+        supabase.from('matchups').select('id', { count: 'exact', head: true }).eq('sport', 'NFL'),
+        supabase.from('matchups').select('id', { count: 'exact', head: true }).eq('sport', 'NBA'),
+      ]);
+      if (nflCheck.error) throw nflCheck.error;
+      if (nbaCheck.error) throw nbaCheck.error;
+
+      const hasNfl = (nflCheck.count ?? 0) > 0;
+      const hasNba = (nbaCheck.count ?? 0) > 0;
+
+      if (hasNfl && hasNba) {
+        Alert.alert('Schedule already exists', 'NFL and NBA schedules have already been generated.');
+        return;
+      }
+
+      const teamNames = TEAMS.map(t => t.name);
+      const rows: { sport: Sport; week: number; home_team: string; away_team: string }[] = [];
+      if (!hasNfl) {
+        rows.push(...generateRoundRobinSchedule(teamNames, 13).map(m => ({ sport: 'NFL' as Sport, ...m })));
+      }
+      if (!hasNba) {
+        rows.push(...generateRoundRobinSchedule(teamNames, 18).map(m => ({ sport: 'NBA' as Sport, ...m })));
+      }
+
+      for (let i = 0; i < rows.length; i += 200) {
+        const { error } = await supabase.from('matchups').insert(rows.slice(i, i + 200));
+        if (error) throw error;
+      }
+
+      Alert.alert('Schedule generated', `Created ${rows.length} matchups.`);
+    } catch (err: any) {
+      Alert.alert('Could not generate schedule', err?.message ?? 'Unknown error');
+    } finally {
+      setGeneratingSchedule(false);
     }
   }
 
@@ -212,6 +255,20 @@ export default function CommissionerScreen() {
       <View style={[styles.divider, { backgroundColor: hexWithAlpha(GOLD, 0.3) }]} />
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
         <View style={styles.section}>
+          <Text style={styles.groupLabel}>Schedule</Text>
+          <Text style={[styles.hintText, { marginBottom: 16 }]}>
+            Generates a 13-week NFL schedule and an 18-week NBA schedule for all 12 teams. Only runs once.
+          </Text>
+          <TouchableOpacity
+            style={[styles.scheduleBtn, generatingSchedule && styles.scheduleBtnDim]}
+            onPress={generateSchedule}
+            disabled={generatingSchedule}
+          >
+            <Text style={styles.scheduleBtnText}>{generatingSchedule ? 'Generating…' : 'Generate Schedule'}</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.section}>
           <View style={styles.sectionHeaderRow}>
             <Text style={styles.groupLabel}>League Overview</Text>
             <Text style={styles.fillCount}>{profiles.length}/{TEAMS.length} filled</Text>
@@ -287,6 +344,9 @@ const styles = StyleSheet.create({
   ownerText: { fontSize:13, color:'#fff' },
   openText: { fontSize:13, color:'#CCCCCC' },
   hintText: { fontSize:13, color:'#CCCCCC', marginTop:4 },
+  scheduleBtn: { backgroundColor:'#C9A84C', borderRadius:10, padding:16, alignItems:'center' },
+  scheduleBtnDim: { opacity:0.5 },
+  scheduleBtnText: { fontSize:14, fontWeight:'500', color:'#0A0A0A' },
   managingLabel: { fontSize:20, fontWeight:'700', fontFamily:'Orbitron_700Bold', marginBottom:16 },
   tabs: { flexDirection:'row', borderBottomWidth:0.5, borderBottomColor:'#222', marginBottom:20 },
   tab: { flex:1, paddingVertical:12, alignItems:'center', borderBottomWidth:2, borderBottomColor:'transparent', marginBottom:-0.5 },
