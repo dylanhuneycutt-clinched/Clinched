@@ -8,7 +8,9 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "test:sportsdata": "tsx scripts/test-sportsdata.ts",
+    "sync:players": "tsx scripts/sync-players.ts"
   },
   "dependencies": {
     "@expo-google-fonts/orbitron": "^0.4.2",
@@ -44,6 +46,7 @@
     "@types/react": "~19.1.0",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
+    "tsx": "^4.23.1",
     "typescript": "~5.9.2"
   },
   "private": true

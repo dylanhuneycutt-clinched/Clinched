@@ -4,56 +4,12 @@ import { useRouter } from 'expo-router';
 import { useFonts, Orbitron_700Bold } from '@expo-google-fonts/orbitron';
 import { useProfile } from '../../hooks/use-profile';
 import { hexWithAlpha } from '../../constants/color';
+import { STARTER_SLOTS, BENCH_SLOTS, IR_SLOTS, RosterSlot, Sport } from '../../constants/rosters';
 
 const logo = require('../../assets/images/logo1.png');
 
-type SlotDef = { pos: string; label: string };
-
-const STARTER_SLOTS: Record<string, SlotDef[]> = {
-  NFL: [
-    { pos: 'QB', label: 'Quarterback' },
-    { pos: 'QB', label: 'Quarterback' },
-    { pos: 'RB', label: 'Running Back' },
-    { pos: 'RB', label: 'Running Back' },
-    { pos: 'WR', label: 'Wide Receiver' },
-    { pos: 'WR', label: 'Wide Receiver' },
-    { pos: 'TE', label: 'Tight End' },
-    { pos: 'TE', label: 'Tight End' },
-  ],
-  NBA: [
-    { pos: 'G', label: 'Guard' },
-    { pos: 'G', label: 'Guard' },
-    { pos: 'F', label: 'Forward' },
-    { pos: 'F', label: 'Forward' },
-    { pos: 'C', label: 'Center' },
-    { pos: 'UT', label: 'Utility' },
-    { pos: 'UT', label: 'Utility' },
-    { pos: 'UT', label: 'Utility' },
-  ],
-  MLB: [
-    { pos: 'C', label: 'Catcher' },
-    { pos: '1B', label: 'First Base' },
-    { pos: '2B', label: 'Second Base' },
-    { pos: 'SS', label: 'Shortstop' },
-    { pos: '3B', label: 'Third Base' },
-    { pos: 'OF', label: 'Outfielder' },
-    { pos: 'OF', label: 'Outfielder' },
-    { pos: 'OF', label: 'Outfielder' },
-  ],
-};
-
-const BENCH_SLOTS: SlotDef[] = [
-  { pos: 'BN', label: 'Bench Player' },
-  { pos: 'BN', label: 'Bench Player' },
-  { pos: 'BN', label: 'Bench Player' },
-];
-
-const IR_SLOTS: SlotDef[] = [
-  { pos: 'IR', label: 'IR Player' },
-];
-
 export default function TeamsScreen() {
-  const [sport, setSport] = useState('NFL');
+  const [sport, setSport] = useState<Sport>('NFL');
   const router = useRouter();
   const { profile } = useProfile();
   const [fontsLoaded] = useFonts({ Orbitron_700Bold });
@@ -62,9 +18,9 @@ export default function TeamsScreen() {
   const teamName = profile?.team_name ?? 'My Team';
   const teamColor = profile?.team_color ?? '#C9A84C';
 
-  const renderSlot = (slot: SlotDef, index: number) => (
+  const renderSlot = (slot: RosterSlot) => (
     <TouchableOpacity
-      key={`${slot.pos}-${index}`}
+      key={slot.id}
       style={[
         styles.slotCard,
         { borderColor: hexWithAlpha(teamColor, 0.18), backgroundColor: hexWithAlpha(teamColor, 0.03) },
@@ -87,7 +43,7 @@ export default function TeamsScreen() {
         </TouchableOpacity>
       </View>
       <View style={styles.tabs}>
-        {['NFL','NBA','MLB'].map(s => (
+        {(['NFL','NBA','MLB'] as const).map(s => (
           <TouchableOpacity key={s} style={[styles.tab, sport===s && styles.tabOn]} onPress={() => setSport(s)}>
             <Text style={[styles.tabText, sport===s && styles.tabTextOn]}>{s}</Text>
           </TouchableOpacity>
