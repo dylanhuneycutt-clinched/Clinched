@@ -46,10 +46,10 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: { flex:1, backgroundColor:'#0A0A0A' },
   scroll: { flex:1 },
-  topbar: { flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:24, paddingTop:60, paddingBottom:4 },
+  topbar: { flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:24, paddingTop:20, paddingBottom:4 },
   logoWrap: { flexDirection:'row', alignItems:'center' },
   logo: { width:120, height:120 },
-  logoText: { fontSize:22, fontWeight:'500', color:'#C9A84C', marginLeft:8, fontFamily:'Orbitron_700Bold' },
+  logoText: { fontSize:26, fontWeight:'500', color:'#C9A84C', marginLeft:8, fontFamily:'Orbitron_700Bold' },
   hero: { paddingHorizontal:24, paddingTop:20, paddingBottom:24 },
   heroLabel: { fontSize:13, color:'#CCCCCC', marginBottom:6 },
   heroNum: { fontSize:40, fontWeight:'700', letterSpacing:-1, fontFamily:'Orbitron_700Bold' },

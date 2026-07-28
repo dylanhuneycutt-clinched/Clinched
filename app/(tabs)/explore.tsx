@@ -115,10 +115,10 @@ export default function TeamsScreen() {
 
 const styles = StyleSheet.create({
   container: { flex:1, backgroundColor:'#0A0A0A' },
-  topbar: { paddingHorizontal:24, paddingTop:60, paddingBottom:4 },
+  topbar: { paddingHorizontal:24, paddingTop:20, paddingBottom:4 },
   logoWrap: { flexDirection:'row', alignItems:'center' },
   logo: { width:120, height:120 },
-  logoText: { fontSize:22, fontWeight:'500', color:'#C9A84C', marginLeft:8, fontFamily:'Orbitron_700Bold' },
+  logoText: { fontSize:26, fontWeight:'500', color:'#C9A84C', marginLeft:8, fontFamily:'Orbitron_700Bold' },
   tabs: { flexDirection:'row', borderBottomWidth:0.5, borderBottomColor:'#222', marginHorizontal:24 },
   tab: { flex:1, paddingVertical:12, alignItems:'center', borderBottomWidth:2, borderBottomColor:'transparent', marginBottom:-0.5 },
   tabOn: { borderBottomColor:'#C9A84C' },

@@ -42,10 +42,10 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   container: { flex:1, backgroundColor:'#0A0A0A' },
-  topbar: { paddingHorizontal:24, paddingTop:60, paddingBottom:4 },
+  topbar: { paddingHorizontal:24, paddingTop:20, paddingBottom:4 },
   logoWrap: { flexDirection:'row', alignItems:'center' },
   logo: { width:120, height:120 },
-  logoText: { fontSize:22, fontWeight:'500', color:'#C9A84C', marginLeft:8, fontFamily:'Orbitron_700Bold' },
+  logoText: { fontSize:26, fontWeight:'500', color:'#C9A84C', marginLeft:8, fontFamily:'Orbitron_700Bold' },
   content: { flex:1, alignItems:'center', justifyContent:'center', paddingHorizontal:24 },
   teamName: { fontSize:28, fontWeight:'700', fontFamily:'Orbitron_700Bold', textAlign:'center' },
   fullName: { fontSize:15, color:'#CCCCCC', marginTop:10, textAlign:'center' },
