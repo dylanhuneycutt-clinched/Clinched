@@ -25,6 +25,7 @@ export default function HomeScreen() {
             <Text style={styles.logoText}>Clinched</Text>
           </TouchableOpacity>
         </View>
+
         <View style={styles.hero}>
           <Text style={styles.heroLabel}>My team</Text>
           <Text style={[styles.heroNum, { color: teamColor }]}>{teamName}</Text>
@@ -45,17 +46,17 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: { flex:1, backgroundColor:'#0A0A0A' },
   scroll: { flex:1 },
-  topbar: { flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:24, paddingTop:60, paddingBottom:8 },
-  logoWrap: { alignItems:'flex-start' },
+  topbar: { flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:24, paddingTop:60, paddingBottom:4 },
+  logoWrap: { flexDirection:'row', alignItems:'center' },
   logo: { width:120, height:120 },
-  logoText: { fontSize:11, fontWeight:'500', color:'#C9A84C', letterSpacing:2, marginTop:2, fontFamily:'Orbitron_700Bold' },
+  logoText: { fontSize:22, fontWeight:'500', color:'#C9A84C', marginLeft:8, fontFamily:'Orbitron_700Bold' },
   hero: { paddingHorizontal:24, paddingTop:20, paddingBottom:24 },
-  heroLabel: { fontSize:13, color:'#555', marginBottom:6 },
+  heroLabel: { fontSize:13, color:'#CCCCCC', marginBottom:6 },
   heroNum: { fontSize:40, fontWeight:'700', letterSpacing:-1, fontFamily:'Orbitron_700Bold' },
-  heroSub: { fontSize:13, color:'#666', marginTop:10 },
+  heroSub: { fontSize:13, color:'#CCCCCC', marginTop:10 },
   divider: { height:1, marginHorizontal:24, borderRadius:1 },
   section: { paddingHorizontal:24, paddingTop:24 },
   emptyCard: { borderWidth:0.5, borderRadius:14, padding:24, alignItems:'center' },
   emptyTitle: { fontSize:15, fontWeight:'600', color:'#fff', marginBottom:8, textAlign:'center' },
-  emptyBody: { fontSize:13, color:'#666', textAlign:'center', lineHeight:19 },
+  emptyBody: { fontSize:13, color:'#CCCCCC', textAlign:'center', lineHeight:19 },
 });

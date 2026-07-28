@@ -45,18 +45,18 @@ export default function WaiversScreen() {
 
 const styles = StyleSheet.create({
   container: { flex:1, backgroundColor:'#0A0A0A' },
-  topbar: { paddingHorizontal:24, paddingTop:60, paddingBottom:8 },
-  logoWrap: { alignItems:'flex-start' },
+  topbar: { paddingHorizontal:24, paddingTop:60, paddingBottom:4 },
+  logoWrap: { flexDirection:'row', alignItems:'center' },
   logo: { width:120, height:120 },
-  logoText: { fontSize:11, fontWeight:'500', color:'#C9A84C', letterSpacing:2, marginTop:2, fontFamily:'Orbitron_700Bold' },
+  logoText: { fontSize:22, fontWeight:'500', color:'#C9A84C', marginLeft:8, fontFamily:'Orbitron_700Bold' },
   tabs: { flexDirection:'row', borderBottomWidth:0.5, borderBottomColor:'#222', marginHorizontal:24 },
   tab: { flex:1, paddingVertical:12, alignItems:'center', borderBottomWidth:2, borderBottomColor:'transparent', marginBottom:-0.5 },
   tabOn: { borderBottomColor:'#C9A84C' },
-  tabText: { fontSize:13, color:'#444' },
+  tabText: { fontSize:13, color:'#CCCCCC' },
   tabTextOn: { color:'#C9A84C', fontWeight:'500' },
   scroll: { flex:1 },
   section: { paddingHorizontal:24, paddingTop:24, paddingBottom:40 },
   emptyCard: { borderWidth:0.5, borderRadius:14, padding:24, alignItems:'center' },
   emptyTitle: { fontSize:15, fontWeight:'600', color:'#fff', marginBottom:8, textAlign:'center' },
-  emptyBody: { fontSize:13, color:'#666', textAlign:'center', lineHeight:19 },
+  emptyBody: { fontSize:13, color:'#CCCCCC', textAlign:'center', lineHeight:19 },
 });

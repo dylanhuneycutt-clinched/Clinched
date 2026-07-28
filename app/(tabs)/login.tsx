@@ -58,10 +58,10 @@ export default function LoginScreen() {
       <View style={styles.inner}>
         <Text style={styles.tagline}>{isSignUp ? 'Create your account' : 'Welcome back'}</Text>
         {isSignUp && (
-          <TextInput style={styles.input} placeholder="Full name" placeholderTextColor="#444" value={fullName} onChangeText={setFullName} autoCapitalize="words" />
+          <TextInput style={styles.input} placeholder="Full name" placeholderTextColor="#CCCCCC" value={fullName} onChangeText={setFullName} autoCapitalize="words" />
         )}
-        <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#444" value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" />
-        <TextInput style={styles.input} placeholder="Password" placeholderTextColor="#444" value={password} onChangeText={setPassword} secureTextEntry />
+        <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#CCCCCC" value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" />
+        <TextInput style={styles.input} placeholder="Password" placeholderTextColor="#CCCCCC" value={password} onChangeText={setPassword} secureTextEntry />
         <TouchableOpacity style={[styles.btn, loading && styles.btnDim]} onPress={handleAuth} disabled={loading}>
           <Text style={styles.btnText}>{loading ? 'Please wait...' : isSignUp ? 'Create account' : 'Sign in'}</Text>
         </TouchableOpacity>
@@ -79,11 +79,11 @@ const styles = StyleSheet.create({
   logo: { width:200, height:200 },
   logoText: { fontSize:16, fontWeight:'500', color:'#C9A84C', letterSpacing:4, marginTop:8, fontFamily:'Orbitron_700Bold' },
   inner: { paddingHorizontal:32 },
-  tagline: { fontSize:14, color:'#555', marginBottom:32, textAlign:'center' },
+  tagline: { fontSize:14, color:'#CCCCCC', marginBottom:32, textAlign:'center' },
   input: { backgroundColor:'#111', borderWidth:0.5, borderColor:'#222', borderRadius:10, padding:14, fontSize:14, color:'#fff', marginBottom:12 },
   btn: { backgroundColor:'#C9A84C', borderRadius:10, padding:16, alignItems:'center', marginTop:8 },
   btnDim: { opacity:0.5 },
   btnText: { fontSize:14, fontWeight:'500', color:'#0A0A0A' },
   switchBtn: { alignItems:'center', marginTop:20 },
-  switchText: { fontSize:13, color:'#555' },
+  switchText: { fontSize:13, color:'#CCCCCC' },
 });

@@ -3,7 +3,7 @@ export type Team = { name: string; color: string };
 export const TEAMS: Team[] = [
   { name: 'Team Teal', color: '#008080' },
   { name: 'Team White', color: '#FFFFFF' },
-  { name: 'Team Silver', color: '#6e6b6b' },
+  { name: 'Team Neon', color: '#39FF14' },
   { name: 'Team Red', color: '#FF0000' },
   { name: 'Team Blue', color: '#4169E1' },
   { name: 'Team Green', color: '#00C851' },

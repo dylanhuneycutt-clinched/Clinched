@@ -9,7 +9,7 @@ create table if not exists public.profiles (
   created_at timestamptz not null default now(),
   constraint profiles_team_name_valid check (
     team_name in (
-      'Team Teal', 'Team White', 'Team Silver', 'Team Red',
+      'Team Teal', 'Team White', 'Team Neon', 'Team Red',
       'Team Blue', 'Team Green', 'Team Purple', 'Team Pink',
       'Team Orange', 'Team Crimson', 'Team Bronze', 'Team Frost'
     )
@@ -54,7 +54,7 @@ begin
         values
           ('Team Teal', '#008080'),
           ('Team White', '#FFFFFF'),
-          ('Team Silver', '#6e6b6b'),
+          ('Team Neon', '#39FF14'),
           ('Team Red', '#FF0000'),
           ('Team Blue', '#4169E1'),
           ('Team Green', '#00C851'),

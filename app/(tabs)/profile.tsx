@@ -42,13 +42,13 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   container: { flex:1, backgroundColor:'#0A0A0A' },
-  topbar: { paddingHorizontal:24, paddingTop:60, paddingBottom:8 },
-  logoWrap: { alignItems:'flex-start' },
+  topbar: { paddingHorizontal:24, paddingTop:60, paddingBottom:4 },
+  logoWrap: { flexDirection:'row', alignItems:'center' },
   logo: { width:120, height:120 },
-  logoText: { fontSize:11, fontWeight:'500', color:'#C9A84C', letterSpacing:2, marginTop:2, fontFamily:'Orbitron_700Bold' },
+  logoText: { fontSize:22, fontWeight:'500', color:'#C9A84C', marginLeft:8, fontFamily:'Orbitron_700Bold' },
   content: { flex:1, alignItems:'center', justifyContent:'center', paddingHorizontal:24 },
   teamName: { fontSize:28, fontWeight:'700', fontFamily:'Orbitron_700Bold', textAlign:'center' },
-  fullName: { fontSize:15, color:'#888', marginTop:10, textAlign:'center' },
+  fullName: { fontSize:15, color:'#CCCCCC', marginTop:10, textAlign:'center' },
   signOutBtn: { marginHorizontal:24, marginBottom:40, borderRadius:10, borderWidth:0.5, borderColor:'#dc262655', padding:16, alignItems:'center' },
   signOutText: { fontSize:14, fontWeight:'500', color:'#dc2626' },
 });
